@@ -7,6 +7,8 @@ public class NewBehaviourScript : MonoBehaviour
     public Rigidbody2D rb;
     public float moveSpeed;
     public float jumpForce;
+    [SerializeField]private float jumpBufferCounter;
+
     [SerializeField]private bool isGrounded;
     [SerializeField]private bool deactivateGravity;
 
@@ -36,11 +38,22 @@ public class NewBehaviourScript : MonoBehaviour
         }
         if (Input.GetButtonDown("Jump"))
         {
-            if (isGrounded == true)
-            {
-                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-            }
+            jumpBufferCounter = 0.15f;
         }
-                rb.velocity = new Vector2(Input.GetAxisRaw("Horizontal")* moveSpeed, rb.velocity.y);
+        else
+        {
+            jumpBufferCounter -= Time.deltaTime;
+        }
+        if (isGrounded == true && jumpBufferCounter>0)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        }
+
+        //if (Input.GetButtonUp("Jump") && rb.velocity.y > 0)
+        //{
+         //   rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+
+        //}
+        rb.velocity = new Vector2(Input.GetAxisRaw("Horizontal")* moveSpeed, rb.velocity.y);
     }
 }
