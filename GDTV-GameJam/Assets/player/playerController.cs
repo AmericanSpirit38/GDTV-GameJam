@@ -7,7 +7,7 @@ public class NewBehaviourScript : MonoBehaviour
     public Rigidbody2D rb;
     public float moveSpeed;
     public float jumpForce;
-    private bool isGrounded;
+    [SerializeField]private bool isGrounded;
     [SerializeField]private bool deactivateGravity;
 
     public Transform gravityDeactivationPoint;
