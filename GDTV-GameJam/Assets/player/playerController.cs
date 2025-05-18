@@ -7,10 +7,14 @@ public class NewBehaviourScript : MonoBehaviour
     public Rigidbody2D rb;
     public float moveSpeed;
     public float jumpForce;
-    [SerializeField]private float jumpBufferCounter;
+    [SerializeField] private float jumpBufferCounter;
 
-    [SerializeField]private bool isGrounded;
-    [SerializeField]private bool deactivateGravity;
+    [SerializeField] private bool isGrounded;
+    [SerializeField] private bool deactivateGravity;
+    public Transform[] childrenToDetach;
+
+    public float xScale = 1.0492f;
+    public float yScale = 0.6278f;
 
     public Transform gravityDeactivationPoint;
     public Transform groundCheckPoint;
@@ -19,7 +23,6 @@ public class NewBehaviourScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
@@ -28,32 +31,68 @@ public class NewBehaviourScript : MonoBehaviour
         //------------------MOVEMENT---------------------------------------------------------------
         isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, groundCheckRadius, whatIsGround);
         deactivateGravity = Physics2D.OverlapCircle(gravityDeactivationPoint.position, groundCheckRadius, whatIsGround);
-        if (deactivateGravity) 
+        if (deactivateGravity)
         {
             rb.gravityScale = 0;
+            DetachSpecificChildren();
+            transform.localScale = new Vector3(xScale, -yScale, 0);
+            AttachSpecificChildren();
         }
         else
         {
             rb.gravityScale = 2.3f;
+            DetachSpecificChildren();
+            transform.localScale = new Vector3(xScale, yScale, 0);
+            AttachSpecificChildren();
         }
+
         if (Input.GetButtonDown("Jump"))
         {
             jumpBufferCounter = 0.15f;
         }
+
         else
         {
             jumpBufferCounter -= Time.deltaTime;
         }
-        if (isGrounded == true && jumpBufferCounter>0)
+        if (isGrounded == true && jumpBufferCounter > 0)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
 
         //if (Input.GetButtonUp("Jump") && rb.velocity.y > 0)
         //{
-         //   rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+        //   rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
 
         //}
-        rb.velocity = new Vector2(Input.GetAxisRaw("Horizontal")* moveSpeed, rb.velocity.y);
+
+        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+
+        }
+
+        rb.velocity = new Vector2(Input.GetAxisRaw("Horizontal") * moveSpeed, rb.velocity.y);
     }
+    public void DetachSpecificChildren()
+    {
+        foreach (Transform child in childrenToDetach)
+        {
+            if (child != null && child.parent == transform)
+            {
+                child.SetParent(null);
+            }
+        }
+    }
+    public void AttachSpecificChildren()
+    {
+        foreach (Transform child in childrenToDetach)
+        {
+            if (child != null)
+            {
+                child.SetParent(transform);
+            }
+        }
+    }
+
 }
