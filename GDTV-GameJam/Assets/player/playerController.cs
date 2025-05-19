@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class NewBehaviourScript : MonoBehaviour
 {
@@ -8,6 +9,13 @@ public class NewBehaviourScript : MonoBehaviour
     public float moveSpeed;
     public float jumpForce;
     [SerializeField] private float jumpBufferCounter;
+
+    private bool isWallJumping;
+    private float wallJumpingDirection;
+    private float wallJumpingTime = 0.2f;
+    private float wallJumpingCounter;
+    private float wallJumpingDuration = 0.4f;
+    private Vector2 wallJumpingPower = new Vector2(8f, 16f);
 
     [SerializeField] private bool isGrounded;
     [SerializeField] private bool deactivateGravity;
@@ -32,7 +40,7 @@ public class NewBehaviourScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 velocity = Vector2.zero;
+        Vector2 velocity = rb.velocity;
         //------------------GRAVITY---------------------------------------------------------------
         deactivateGravity = Physics2D.OverlapCircle(bottomPoint.position, groundCheckRadius, whatIsGround);
         if (deactivateGravity)
@@ -49,23 +57,7 @@ public class NewBehaviourScript : MonoBehaviour
             }
         }
 
-        //------------------JUMPING---------------------------------------------------------------
-        if (Input.GetButtonDown("Jump"))
-        {
-            jumpBufferCounter = 0.15f;
-        }
-        else
-        {
-            jumpBufferCounter -= Time.deltaTime;
-        }
-        if (isGrounded == true && jumpBufferCounter > 0)
-        {
-            if (transform.eulerAngles.z == 90)
-            {
-                velocity += new Vector2(-jumpForce, jumpForce);
-                Debug.Log("jumped from right wall");
-            }
-        }
+        
        //if (Input.GetButtonUp("Jump") && rb.velocity.y > 0)
         //{
          //   rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
@@ -75,8 +67,9 @@ public class NewBehaviourScript : MonoBehaviour
         //------------------MOVEMENT---------------------------------------------------------------
         float input = Input.GetAxis("Horizontal"); // -1 (left) to +1 (right)
         Vector2 moveDirection = (Vector2)transform.right * input;
-        if (transform.eulerAngles.z == 90 || transform.eulerAngles.z == -90)
+        if (transform.eulerAngles.z == 90 || transform.eulerAngles.z == 270)
         {
+            Debug.Log("isOnWall to true");
             isOnWall = true;
         }
         else
@@ -89,10 +82,10 @@ public class NewBehaviourScript : MonoBehaviour
         }
         else
         {
-            velocity += new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
+            velocity += new Vector2(moveDirection.x * moveSpeed, 0);
         }
         
-        rb.velocity = velocity;
+        
         if (transform.eulerAngles.z == 90 || transform.eulerAngles.z == 270)
         {
             if (rb.velocity.x < 0)
@@ -115,7 +108,25 @@ public class NewBehaviourScript : MonoBehaviour
                 transform.localScale = new Vector3(-xScale, transform.localScale.y, 0);
             }
         }
-        
+
+        //------------------JUMPING---------------------------------------------------------------
+        if (Input.GetButtonDown("Jump"))
+        {
+            jumpBufferCounter = 0.15f;
+        }
+        else
+        {
+            jumpBufferCounter -= Time.deltaTime;
+        }
+        if (isGrounded == true && jumpBufferCounter > 0)
+        {
+            if (transform.eulerAngles.z == 90)
+            {
+                velocity += new Vector2(-jumpForce * 5, jumpForce*5);
+            }
+
+        }
+        rb.velocity = velocity;
     }
     public void DetachSpecificChildren()
     {
@@ -189,5 +200,8 @@ public class NewBehaviourScript : MonoBehaviour
 
         }
     }
-
+    private void wallJump()
+    {
+        rb.velocity = new Vector2(wallJumpingDirection * wallJumpingPower.x, wallJumpingPower.y);
+    }
 }
