@@ -21,7 +21,7 @@ public class NewBehaviourScript : MonoBehaviour
     [SerializeField] private bool deactivateGravity;
     public Transform[] childrenToDetach;
 
-    [SerializeField]private bool isOnWall;
+    [SerializeField] private bool isOnWall;
     public float xScale = 1f;
     public float yScale = 1f;
     private bool canSetRotNScaleDefault;
@@ -57,10 +57,10 @@ public class NewBehaviourScript : MonoBehaviour
             }
         }
 
-        
-       //if (Input.GetButtonUp("Jump") && rb.velocity.y > 0)
+
+        //if (Input.GetButtonUp("Jump") && rb.velocity.y > 0)
         //{
-         //   rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+        //   rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
 
         //}
 
@@ -84,8 +84,8 @@ public class NewBehaviourScript : MonoBehaviour
         {
             velocity += new Vector2(moveDirection.x * moveSpeed, 0);
         }
-        
-        
+
+
         if (transform.eulerAngles.z == 90 || transform.eulerAngles.z == 270)
         {
             if (rb.velocity.x < 0)
@@ -122,7 +122,7 @@ public class NewBehaviourScript : MonoBehaviour
         {
             if (transform.eulerAngles.z == 90)
             {
-                velocity += new Vector2(-jumpForce * 5, jumpForce*5);
+                //velocity += new Vector2(-jumpForce * 5, jumpForce*5);
             }
 
         }
@@ -157,13 +157,13 @@ public class NewBehaviourScript : MonoBehaviour
 
             Vector2 normal = collision.contacts[0].normal;
             Vector2 roundedNormal = new Vector2(Mathf.Round(normal.x), Mathf.Round(normal.y));
-            if (roundedNormal == Vector2.down) 
+            if (roundedNormal == Vector2.down)
             {
                 transform.localScale = new Vector3(transform.localScale.x, -yScale, 0);
             }
             if (roundedNormal == Vector2.left)
             {
-                transform.rotation = Quaternion.Euler(0,0,90);
+                transform.rotation = Quaternion.Euler(0, 0, 90);
                 canSetRotNScaleDefault = false;
             }
             if (roundedNormal == Vector2.right)
@@ -202,6 +202,5 @@ public class NewBehaviourScript : MonoBehaviour
     }
     private void wallJump()
     {
-        rb.velocity = new Vector2(wallJumpingDirection * wallJumpingPower.x, wallJumpingPower.y);
     }
 }

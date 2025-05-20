@@ -416,7 +416,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 664845010}
   moveSpeed: 5
-  jumpForce: 13
+  jumpForce: 10
   jumpBufferCounter: 0
   isGrounded: 0
   deactivateGravity: 0
