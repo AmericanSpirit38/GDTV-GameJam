@@ -420,11 +420,7 @@ MonoBehaviour:
   jumpBufferCounter: 0
   isGrounded: 0
   deactivateGravity: 0
-  childrenToDetach:
-  - {fileID: 1296797641}
-  - {fileID: 989173223}
-  - {fileID: 2051750255}
-  - {fileID: 1681051917}
+  childrenToDetach: []
   isOnWall: 0
   xScale: 1
   yScale: 1
@@ -433,7 +429,7 @@ MonoBehaviour:
   leftPoint: {fileID: 2051750255}
   rightPoint: {fileID: 1681051917}
   bottomPoint: {fileID: 1296797641}
-  groundCheckRadius: 0.1
+  groundCheckRadius: 0
   whatIsGround:
     serializedVersion: 2
     m_Bits: 8
