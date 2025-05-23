@@ -10,13 +10,10 @@ public class NewBehaviourScript : MonoBehaviour
     public float jumpForce;
     [SerializeField] private float jumpBufferCounter;
 
-    private bool isWallJumping;
-    private float wallJumpingDirection;
-    private float wallJumpingTime = 0.2f;
-    private float wallJumpingCounter;
-    private float wallJumpingDuration = 0.4f;
-    private Vector2 wallJumpingPower = new Vector2(8f, 16f);
-
+    public bool isTouchingRight;
+    public bool isTouchingTop;
+    public bool isTouchingLeft;
+    public bool isTouchingBottom;
     [SerializeField] private bool isGrounded;
     [SerializeField] private bool deactivateGravity;
     public Transform[] childrenToDetach;
@@ -46,8 +43,11 @@ public class NewBehaviourScript : MonoBehaviour
     void Update()
     {
         //------------------GRAVITY---------------------------------------------------------------
-        deactivateGravity = Physics2D.OverlapCircle(bottomPoint.position, groundCheckRadius, whatIsGround);
-        if (deactivateGravity)
+        isTouchingBottom = Physics2D.OverlapCircle(bottomPoint.position, groundCheckRadius, whatIsGround);
+        isTouchingTop = Physics2D.OverlapCircle(topPoint.position, groundCheckRadius, whatIsGround);
+        isTouchingRight = Physics2D.OverlapCircle(rightPoint.position, groundCheckRadius, whatIsGround);
+        isTouchingLeft = Physics2D.OverlapCircle(leftPoint.position, groundCheckRadius, whatIsGround);
+        if (isGrounded)
         {
             rb.gravityScale = 0;
         }
@@ -124,6 +124,7 @@ public class NewBehaviourScript : MonoBehaviour
   
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log("collision");
         if (collision.gameObject.layer == LayerMask.NameToLayer("ground"))
         {
             isGrounded = true;
@@ -169,7 +170,11 @@ public class NewBehaviourScript : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("ground"))
         {
             isGrounded = false;
-            canSetRotNScaleDefault = true;
+            if (!isOnWall)
+            {
+                canSetRotNScaleDefault = true;
+            }
+            
 
         }
     }
