@@ -21,10 +21,14 @@ public class NewBehaviourScript : MonoBehaviour
     [SerializeField] private bool deactivateGravity;
     public Transform[] childrenToDetach;
 
+    [SerializeField] private Vector2 velocity;
+    [SerializeField] private Vector2 inputVelocity;
+    [SerializeField] private Vector2 savedVelocity; // toto pouzijem na defaultne nastavenie dalsej velocity ku ktorej potom pripocitam movement
+
     [SerializeField] private bool isOnWall;
     public float xScale = 1f;
     public float yScale = 1f;
-    private bool canSetRotNScaleDefault;
+    [SerializeField] private bool canSetRotNScaleDefault;
     public bool shouldFlip;
     public Transform topPoint;
     public Transform leftPoint;
@@ -35,12 +39,12 @@ public class NewBehaviourScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector2 velocity = rb.velocity;
         //------------------GRAVITY---------------------------------------------------------------
         deactivateGravity = Physics2D.OverlapCircle(bottomPoint.position, groundCheckRadius, whatIsGround);
         if (deactivateGravity)
@@ -57,19 +61,12 @@ public class NewBehaviourScript : MonoBehaviour
             }
         }
 
-
-        //if (Input.GetButtonUp("Jump") && rb.velocity.y > 0)
-        //{
-        //   rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
-
-        //}
-
         //------------------MOVEMENT---------------------------------------------------------------
         float input = Input.GetAxis("Horizontal"); // -1 (left) to +1 (right)
         Vector2 moveDirection = (Vector2)transform.right * input;
         if (transform.eulerAngles.z == 90 || transform.eulerAngles.z == 270)
         {
-            Debug.Log("isOnWall to true");
+            //Debug.Log("isOnWall to true");
             isOnWall = true;
         }
         else
@@ -78,13 +75,13 @@ public class NewBehaviourScript : MonoBehaviour
         }
         if (isOnWall)
         {
-            velocity += moveDirection * moveSpeed;
+            inputVelocity = moveDirection * moveSpeed;
         }
         else
         {
-            velocity += new Vector2(moveDirection.x * moveSpeed, 0);
+            inputVelocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
         }
-
+        rb.velocity = inputVelocity;
 
         if (transform.eulerAngles.z == 90 || transform.eulerAngles.z == 270)
         {
@@ -120,35 +117,11 @@ public class NewBehaviourScript : MonoBehaviour
         }
         if (isGrounded == true && jumpBufferCounter > 0)
         {
-            if (transform.eulerAngles.z == 90)
-            {
-                //velocity += new Vector2(-jumpForce * 5, jumpForce*5);
-            }
+            Jump();
 
         }
-        rb.velocity = velocity;
     }
-    public void DetachSpecificChildren()
-    {
-        foreach (Transform child in childrenToDetach)
-        {
-            if (child != null && child.parent == transform)
-            {
-                child.SetParent(null);
-            }
-        }
-    }
-    public void AttachSpecificChildren()
-    {
-        foreach (Transform child in childrenToDetach)
-        {
-            if (child != null)
-            {
-                child.SetParent(transform);
-            }
-        }
-    }
-
+  
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("ground"))
@@ -200,7 +173,36 @@ public class NewBehaviourScript : MonoBehaviour
 
         }
     }
-    private void wallJump()
+    private void Jump()
     {
+        Debug.Log("jump");
+        if (!isOnWall) 
+        {
+            Vector2 v = rb.velocity;
+            v.y = 0f;
+            v.y += jumpForce;
+            rb.velocity = v;
+        }
+        // handle wall jump
+    }
+    public void DetachSpecificChildren()
+    {
+        foreach (Transform child in childrenToDetach)
+        {
+            if (child != null && child.parent == transform)
+            {
+                child.SetParent(null);
+            }
+        }
+    }
+    public void AttachSpecificChildren()
+    {
+        foreach (Transform child in childrenToDetach)
+        {
+            if (child != null)
+            {
+                child.SetParent(transform);
+            }
+        }
     }
 }
