@@ -11,8 +11,13 @@ public class CameraController : MonoBehaviour
 
     private void Start()
     {
+        if (soundSlider == null)
+        {
+            soundSlider = GameObject.Find("Sound Slider").GetComponent<Slider>();
+        }
         soundSlider.onValueChanged.AddListener(ChangeSoundVolume);
-        AudioListener.volume = 10f;    }
+        AudioListener.volume = 1f;
+    }
     
     public void ChangeSoundVolume(float value)
     {
