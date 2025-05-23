@@ -5,34 +5,37 @@ using static UnityEngine.GraphicsBuffer;
 
 public class NewBehaviourScript : MonoBehaviour
 {
+    public Transform[] childrenToDetach;
+    [Header("movement")]
     public Rigidbody2D rb;
     public float moveSpeed;
     public float jumpForce;
-    [SerializeField] private float jumpBufferCounter;
-
-    public bool isTouchingRight;
-    public bool isTouchingTop;
-    public bool isTouchingLeft;
-    public bool isTouchingBottom;
-    [SerializeField] private bool isGrounded;
-    [SerializeField] private bool deactivateGravity;
-    public Transform[] childrenToDetach;
-
     [SerializeField] private Vector2 velocity;
     [SerializeField] private Vector2 inputVelocity;
-    [SerializeField] private Vector2 savedVelocity; // toto pouzijem na defaultne nastavenie dalsej velocity ku ktorej potom pripocitam movement
+    [SerializeField] private float jumpBufferCounter;
 
-    [SerializeField] private bool isOnWall;
-    public float xScale = 1f;
-    public float yScale = 1f;
-    [SerializeField] private bool canSetRotNScaleDefault;
-    public bool shouldFlip;
+    [Header("touching")]
     public Transform topPoint;
     public Transform leftPoint;
     public Transform rightPoint;
     public Transform bottomPoint;
+    public bool isTouchingRight;
+    public bool isTouchingTop;
+    public bool isTouchingLeft;
+    public bool isTouchingBottom;
+    [SerializeField] private bool isOnWall;
+    [SerializeField] private bool isGrounded;
     public float groundCheckRadius;
     public LayerMask whatIsGround;
+
+
+
+    public float xScale = 1f;
+    public float yScale = 1f;
+    [SerializeField] private bool canSetRotNScaleDefault;
+    public bool shouldFlip;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -47,6 +50,7 @@ public class NewBehaviourScript : MonoBehaviour
         isTouchingTop = Physics2D.OverlapCircle(topPoint.position, groundCheckRadius, whatIsGround);
         isTouchingRight = Physics2D.OverlapCircle(rightPoint.position, groundCheckRadius, whatIsGround);
         isTouchingLeft = Physics2D.OverlapCircle(leftPoint.position, groundCheckRadius, whatIsGround);
+        isGrounded = isTouchingBottom == true || isTouchingTop == true || isTouchingRight == true || isTouchingLeft == true;
         if (isGrounded)
         {
             rb.gravityScale = 0;
@@ -54,16 +58,39 @@ public class NewBehaviourScript : MonoBehaviour
         else
         {
             rb.gravityScale = 2.7f;
-            if (canSetRotNScaleDefault)
-            {
-                transform.localScale = new Vector3(transform.localScale.x, yScale, 0);
-                transform.rotation = Quaternion.identity;
-            }
+            transform.localScale = new Vector3(transform.localScale.x, yScale, 0);
+            transform.rotation = Quaternion.identity;
+            
         }
 
         //------------------MOVEMENT---------------------------------------------------------------
         float input = Input.GetAxis("Horizontal"); // -1 (left) to +1 (right)
         Vector2 moveDirection = (Vector2)transform.right * input;
+        if (isTouchingBottom)
+        {
+            transform.localScale = new Vector3(transform.localScale.x, yScale, 0);
+        }
+        if (isTouchingLeft)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 90);
+            isOnWall = true;
+            canSetRotNScaleDefault = false;
+        }
+        if (isTouchingRight)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 270);
+            transform.localScale = new Vector3(-xScale, transform.localScale.y, 0);
+            isOnWall = true;
+            canSetRotNScaleDefault = false;
+
+        }
+        if (isTouchingTop)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+            transform.localScale = new Vector3(-xScale, transform.localScale.y, 0);
+            canSetRotNScaleDefault = false;
+
+        }
         if (transform.eulerAngles.z == 90 || transform.eulerAngles.z == 270)
         {
             //Debug.Log("isOnWall to true");
@@ -122,62 +149,6 @@ public class NewBehaviourScript : MonoBehaviour
         }
     }
   
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        Debug.Log("collision");
-        if (collision.gameObject.layer == LayerMask.NameToLayer("ground"))
-        {
-            isGrounded = true;
-
-            Vector2 normal = collision.contacts[0].normal;
-            Vector2 roundedNormal = new Vector2(Mathf.Round(normal.x), Mathf.Round(normal.y));
-            if (roundedNormal == Vector2.down)
-            {
-                transform.localScale = new Vector3(transform.localScale.x, -yScale, 0);
-            }
-            if (roundedNormal == Vector2.left)
-            {
-                transform.rotation = Quaternion.Euler(0, 0, 90);
-                canSetRotNScaleDefault = false;
-            }
-            if (roundedNormal == Vector2.right)
-            {
-                transform.rotation = Quaternion.Euler(0, 0, 270);
-                transform.localScale = new Vector3(-xScale, transform.localScale.y, 0);
-                canSetRotNScaleDefault = false;
-
-            }
-            if (roundedNormal == Vector2.up)
-            {
-                transform.rotation = Quaternion.Euler(0, 0, 0);
-                transform.localScale = new Vector3(-xScale, transform.localScale.y, 0);
-                canSetRotNScaleDefault = false;
-
-            }
-
-
-        }
-    }
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("ground"))
-        {
-            isGrounded = true;
-        }
-    }
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("ground"))
-        {
-            isGrounded = false;
-            if (!isOnWall)
-            {
-                canSetRotNScaleDefault = true;
-            }
-            
-
-        }
-    }
     private void Jump()
     {
         Debug.Log("jump");
