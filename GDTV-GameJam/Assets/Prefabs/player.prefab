@@ -383,7 +383,6 @@ Transform:
   - {fileID: 6166115697854940273}
   - {fileID: 5708971575086194788}
   - {fileID: 4553926876636747871}
-  - {fileID: 2174665338614799968}
   - {fileID: 5332786974096888833}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -523,57 +522,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5735c29fd8828c42ae396855552e663, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 466692221448152950}
-  moveSpeed: 5
-  jumpForce: 10
-  jumpBufferCounter: 0
-  isGrounded: 0
-  deactivateGravity: 0
   childrenToDetach:
   - {fileID: 5708971575086194788}
   - {fileID: 4553926876636747871}
-  - {fileID: 2174665338614799968}
+  - {fileID: 0}
   - {fileID: 5332786974096888833}
-  isOnWall: 0
-  xScale: 1
-  yScale: 1
-  shouldFlip: 0
+  rb: {fileID: 466692221448152950}
+  moveSpeed: 5
+  jumpForce: 10
+  velocity: {x: 0, y: 0}
+  inputVelocity: {x: 0, y: 0}
+  jumpBufferCounter: 0
   topPoint: {fileID: 4553926876636747871}
-  leftPoint: {fileID: 2174665338614799968}
   rightPoint: {fileID: 5332786974096888833}
   bottomPoint: {fileID: 5708971575086194788}
+  isTouchingRight: 0
+  isTouchingTop: 0
+  isTouchingLeft: 0
+  isTouchingBottom: 0
+  isOnWall: 0
+  isGrounded: 0
   groundCheckRadius: 0.1
   whatIsGround:
     serializedVersion: 2
     m_Bits: 8
---- !u!1 &7230864542989063193
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2174665338614799968}
-  m_Layer: 0
-  m_Name: LeftPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2174665338614799968
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7230864542989063193}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.5, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3008264154481143800}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  xScale: 1
+  yScale: 1
+  canSetRotNScaleDefault: 0
+  shouldFlip: 0
