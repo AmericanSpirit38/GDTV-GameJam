@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MusicSource : MonoBehaviour
 {
@@ -28,7 +30,17 @@ public class MusicSource : MonoBehaviour
         AudioSource audioSource = GetComponent<AudioSource>();
         audioSource.volume = musicSlider.value;
     }
-    
+
+    public void OnEnable()
+    {
+        AudioSource audioSource = GetComponent<AudioSource>();
+        if (audioSource.clip == null && musicClips.Count > 0)
+        {
+            audioSource.clip = musicClips[SceneManager.GetActiveScene().buildIndex];
+            audioSource.Play();
+        }
+    }
+
     public void ChangeMusicVolume(float value)
     {
         AudioSource audioSource = GetComponent<AudioSource>();
