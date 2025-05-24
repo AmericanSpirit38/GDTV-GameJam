@@ -7,6 +7,7 @@ using static UnityEngine.GraphicsBuffer;
 public class NewBehaviourScript : MonoBehaviour
 {
     public Transform[] childrenToDetach;
+    public Animator anim;
     [Header("movement")]
     public Rigidbody2D rb;
     public float moveSpeed;
@@ -54,6 +55,14 @@ public class NewBehaviourScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (rb.velocity.x != 0 && isGrounded)
+        {
+            anim.SetBool("isWalking", true);
+        }
+        else 
+        {
+            anim.SetBool("isWalking", false);
+        }
         //------------------GRAVITY---------------------------------------------------------------
         isTouchingBottom = Physics2D.OverlapCircle(bottomPoint.position, groundCheckRadius, whatIsGround) || Physics2D.OverlapCircle(bottomPoint2.position, groundCheckRadius, whatIsGround);
         isTouchingTop = Physics2D.OverlapCircle(topPoint.position, groundCheckRadius, whatIsGround);
