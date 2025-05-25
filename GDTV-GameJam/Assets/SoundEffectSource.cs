@@ -22,8 +22,16 @@ public class SoundEffectSource : MonoBehaviour
 
     public void PlaySoundEffect(int index)
     {
+        Debug.Log("Playing sound effect at index: " + index);
         AudioSource audioSource = GetComponent<AudioSource>();
-        audioSource.clip = soundEffectClips[index];
         audioSource.PlayOneShot(soundEffectClips[index]);
+        Debug.Log("Sound effect played: " + soundEffectClips[index].name);
+    }
+    
+    public void ChangeMusicVolume(float value)
+    {
+        AudioSource audioSource = GetComponent<AudioSource>();
+        audioSource.volume = value;
+        Debug.Log("Sound Effect volume changed to: " + value);
     }
 }
