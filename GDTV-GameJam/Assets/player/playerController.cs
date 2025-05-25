@@ -6,12 +6,10 @@ using static UnityEngine.GraphicsBuffer;
 
 public class NewBehaviourScript : MonoBehaviour
 {
-    public Transform[] childrenToDetach;
     public Animator anim;
     [Header("movement")]
     public Rigidbody2D rb;
     public float moveSpeed;
-
     public float jumpForce;
     [SerializeField] private Vector2 velocity;
     [SerializeField] private Vector2 inputVelocity;
@@ -27,8 +25,8 @@ public class NewBehaviourScript : MonoBehaviour
     public Transform bottomPoint2;
     public bool isTouchingRight;
     public bool isTouchingTop;
-    public bool isTouchingLeft;
     public bool isTouchingBottom;
+    public Collider2D target;
     [SerializeField] private bool isOnWall;
     [SerializeField] private bool isGrounded;
     public float groundCheckRadius;
@@ -36,14 +34,8 @@ public class NewBehaviourScript : MonoBehaviour
     public enum wallTypes { top, bottom, left, right, none }; //default je 
     public wallTypes currentWall;
 
-
-
-
     public float xScale = 1.5f;
     public float yScale = 1.5f;
-    [SerializeField] private bool canSetRotNScaleDefault;
-    public bool shouldFlip;
-
 
 
     // Start is called before the first frame update
@@ -59,7 +51,7 @@ public class NewBehaviourScript : MonoBehaviour
         {
             anim.SetBool("isWalking", true);
         }
-        else 
+        else
         {
             anim.SetBool("isWalking", false);
         }
@@ -67,8 +59,22 @@ public class NewBehaviourScript : MonoBehaviour
         isTouchingBottom = Physics2D.OverlapCircle(bottomPoint.position, groundCheckRadius, whatIsGround) || Physics2D.OverlapCircle(bottomPoint2.position, groundCheckRadius, whatIsGround);
         isTouchingTop = Physics2D.OverlapCircle(topPoint.position, groundCheckRadius, whatIsGround);
         isTouchingRight = Physics2D.OverlapCircle(rightPoint.position, groundCheckRadius, whatIsGround);
-        Collider2D target = Physics2D.OverlapCircle(rightPoint.position, groundCheckRadius, whatIsGround);
+        target = Physics2D.OverlapCircle(bottomPoint.position, groundCheckRadius, whatIsGround);
+        if (target == null)
+        {
+            target = Physics2D.OverlapCircle(bottomPoint2.position, groundCheckRadius, whatIsGround);
+        }
         isGrounded = isTouchingBottom == true || isTouchingTop == true || isTouchingRight == true;
+        if(isTouchingBottom == false && isTouchingTop == false && isTouchingRight == false)
+        {
+            isOnWall = false;
+            isGrounded = false;
+        }
+        if (isTouchingBottom && transform.eulerAngles.z == 0)
+        {
+            isOnWall = false;
+            currentWall = wallTypes.bottom;
+        }
         if (isGrounded)
         {
             rb.gravityScale = 0;
@@ -84,13 +90,12 @@ public class NewBehaviourScript : MonoBehaviour
         //------------------ROTATION AND WALLS---------------------------------------------------------------
         if (isTouchingRight)
         {
-            if (currentWall == wallTypes.bottom || currentWall == wallTypes.none)
+            if (currentWall == wallTypes.bottom || currentWall == wallTypes.none|| currentWall == wallTypes.top)
             {
                 if (rb.velocity.x > 0)
                 {
                     transform.rotation = Quaternion.Euler(0, 0, 90);
                     isOnWall = true;
-                    canSetRotNScaleDefault = false;
                     currentWall = wallTypes.right;
                     Debug.Log("to right");
                 }
@@ -99,33 +104,41 @@ public class NewBehaviourScript : MonoBehaviour
                     transform.rotation = Quaternion.Euler(0, 0, 270);
                     transform.localScale = new Vector3(-xScale, transform.localScale.y, 0);
                     isOnWall = true;
-                    canSetRotNScaleDefault = false;
                     currentWall = wallTypes.left;
-                    Debug.Log($"to left, velocity was{rb.velocity.x} next state is {currentWall}");
+                    Debug.Log("to left");
                 }
             }
             else if (currentWall == wallTypes.left || currentWall == wallTypes.right)
             {
-                transform.rotation = Quaternion.Euler(0, 0, 0);
-                isOnWall = false;
-                canSetRotNScaleDefault = false;
-                currentWall = wallTypes.bottom;
-                Debug.Log("to bottom");
+                if (rb.velocity.y > 0)
+                {
+                    currentWall = wallTypes.top;
+                    transform.rotation = Quaternion.Euler(0, 0, 180);
+                    transform.localScale = new Vector2(-xScale, yScale);
+                    Debug.Log("to to top");
+                }
+                else
+                {
+                    currentWall = wallTypes.bottom;
+                    transform.rotation = Quaternion.Euler(0, 0, 0);
+                    isOnWall = false;
+                    Debug.Log("to bottom");
+                }
             }
         }
+
 
 
         //------------------MOVEMENT---------------------------------------------------------------
 
         float input = Input.GetAxis("Horizontal"); // -1 (left) to +1 (right)
         Vector2 moveDirection = (Vector2)transform.right * input;
-        if (transform.eulerAngles.z == 90 || transform.eulerAngles.z == 270)
+        if (isGrounded)
         {
-            isOnWall = true;
-        }
-        else
-        {
-            isOnWall = false;
+            if(target != null && target.gameObject.layer == 7)
+            {
+                moveDirection *= -1;
+            }
         }
         if (isOnWall)
         {
@@ -167,7 +180,19 @@ public class NewBehaviourScript : MonoBehaviour
             {
                 transform.localScale = new Vector3(-xScale, transform.localScale.y, 0);
             }
+            if (currentWall == wallTypes.top)
+            {
+                if (rb.velocity.x > 0)
+                {
+                    transform.localScale = new Vector3(-xScale, transform.localScale.y, 0);
+                }
+                if (rb.velocity.x < 0)
+                {
+                    transform.localScale = new Vector3(xScale, transform.localScale.y, 0);
+                }
+            }
         }
+        
 
         //------------------JUMPING---------------------------------------------------------------
         if (Input.GetButtonDown("Jump"))
@@ -230,25 +255,5 @@ public class NewBehaviourScript : MonoBehaviour
 
         // Apply wall jump force
         rb.AddForce(jumpDir.normalized * jumpForce, ForceMode2D.Impulse);
-    }
-    public void DetachSpecificChildren()
-    {
-        foreach (Transform child in childrenToDetach)
-        {
-            if (child != null && child.parent == transform)
-            {
-                child.SetParent(null);
-            }
-        }
-    }
-    public void AttachSpecificChildren()
-    {
-        foreach (Transform child in childrenToDetach)
-        {
-            if (child != null)
-            {
-                child.SetParent(transform);
-            }
-        }
     }
 }
