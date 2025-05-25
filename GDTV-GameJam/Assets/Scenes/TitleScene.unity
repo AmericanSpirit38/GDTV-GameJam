@@ -267,6 +267,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 85dbe51336e2db64fb076f6b6b31ad6c, type: 3}
   - {fileID: 8300000, guid: 0c793f9edd3713e42b87b5654778f06b, type: 3}
   - {fileID: 8300000, guid: d2d5c0bb096e06342aafd85ee504def4, type: 3}
+  soundEffectSlider: {fileID: 2102168377}
 --- !u!82 &154475194
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3292,7 +3293,7 @@ GameObject:
   - component: {fileID: 2102168376}
   - component: {fileID: 2102168377}
   m_Layer: 5
-  m_Name: Sound Slider (2)
+  m_Name: Sound Effect Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
