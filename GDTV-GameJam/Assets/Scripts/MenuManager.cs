@@ -13,12 +13,15 @@ public class MenuManager : MonoBehaviour
     {
         
     }
-
-    // Update is called once per frame
+    
     public void StartGame()
     {
-        SceneManager.LoadScene(1);
+        Debug.Log("Starting Game");
+        SoundEffectSource.Instance.PlaySoundEffect(2);
+        // Load the first level after a delay
+        StartCoroutine(StartGameWithDelay(1f));
     }
+
     public void ExitGame()
     {
         Debug.Log("Closing Game");
@@ -27,5 +30,11 @@ public class MenuManager : MonoBehaviour
 #else   
         Application.Quit();
 #endif     
+    }
+    
+    public IEnumerator StartGameWithDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadScene(1);
     }
 }

@@ -30,13 +30,23 @@ public class MusicSource : MonoBehaviour
         AudioSource audioSource = GetComponent<AudioSource>();
         audioSource.volume = musicSlider.value;
     }
+    
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
 
-    public void OnEnable()
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         AudioSource audioSource = GetComponent<AudioSource>();
-        if (audioSource.clip == null && musicClips.Count > 0)
+        if (musicClips.Count > scene.buildIndex)
         {
-            audioSource.clip = musicClips[SceneManager.GetActiveScene().buildIndex];
+            audioSource.clip = musicClips[scene.buildIndex];
             audioSource.Play();
         }
     }
