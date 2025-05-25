@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class SoundEffectSource : MonoBehaviour
 {
     public static SoundEffectSource Instance { get; private set; }
     public List<AudioClip> soundEffectClips;
+    [FormerlySerializedAs("musicSlider")] [SerializeField] private Slider soundEffectSlider;
 
     private void Awake()
     {
@@ -18,6 +21,13 @@ public class SoundEffectSource : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+    
+    private void Start()
+    {
+        soundEffectSlider.onValueChanged.AddListener(ChangeMusicVolume);
+        AudioSource audioSource = GetComponent<AudioSource>();
+        audioSource.volume = soundEffectSlider.value;
     }
 
     public void PlaySoundEffect(int index)
