@@ -13,6 +13,11 @@ public class spikeController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
+            SoundEffectSource.Instance.PlaySoundEffect(1);
+            if (checkPointMan == null)
+            {
+                playerController.instance.gameObject.transform.position = new Vector3(-7, -2, 0);
+            }
             if (checkPointMan.isCheckpointActive)
             {
                 playerController.instance.gameObject.transform.position = checkPointMan.checkPoint.position;
