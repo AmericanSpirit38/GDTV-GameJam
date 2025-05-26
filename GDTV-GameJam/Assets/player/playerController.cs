@@ -4,8 +4,13 @@ using UnityEditorInternal;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
-public class NewBehaviourScript : MonoBehaviour
+public class playerController : MonoBehaviour
 {
+    public static playerController instance;
+    private void Awake()
+    {
+        instance = this;
+    }
     public Animator anim;
     [Header("movement")]
     public Rigidbody2D rb;
@@ -20,6 +25,7 @@ public class NewBehaviourScript : MonoBehaviour
 
     [Header("touching")]
     public Transform topPoint;
+    public Transform topPoint2;
     public Transform rightPoint;
     public Transform bottomPoint;
     public Transform bottomPoint2;
@@ -57,7 +63,7 @@ public class NewBehaviourScript : MonoBehaviour
         }
         //------------------GRAVITY---------------------------------------------------------------
         isTouchingBottom = Physics2D.OverlapCircle(bottomPoint.position, groundCheckRadius, whatIsGround) || Physics2D.OverlapCircle(bottomPoint2.position, groundCheckRadius, whatIsGround);
-        isTouchingTop = Physics2D.OverlapCircle(topPoint.position, groundCheckRadius, whatIsGround);
+        isTouchingTop = Physics2D.OverlapCircle(topPoint.position, groundCheckRadius, whatIsGround) || Physics2D.OverlapCircle(topPoint2.position, groundCheckRadius, whatIsGround);
         isTouchingRight = Physics2D.OverlapCircle(rightPoint.position, groundCheckRadius, whatIsGround);
         target = Physics2D.OverlapCircle(bottomPoint.position, groundCheckRadius, whatIsGround);
         if (target == null)
@@ -126,16 +132,27 @@ public class NewBehaviourScript : MonoBehaviour
                 }
             }
         }
+        else if (isTouchingTop)
+        {
+            currentWall = wallTypes.top;
+            transform.rotation = Quaternion.Euler(0, 0, 180);
+            transform.localScale = new Vector2(-xScale, yScale);
+            isOnWall = true;
+        }
 
 
 
-        //------------------MOVEMENT---------------------------------------------------------------
+            //------------------MOVEMENT---------------------------------------------------------------
 
-        float input = Input.GetAxis("Horizontal"); // -1 (left) to +1 (right)
+            float input = Input.GetAxis("Horizontal"); // -1 (left) to +1 (right)
         Vector2 moveDirection = (Vector2)transform.right * input;
         if (isGrounded)
         {
             if(target != null && target.gameObject.layer == 7)
+            {
+                moveDirection *= -1;
+            }
+            if(target != null && target.gameObject.layer != 7 && transform.eulerAngles.z == 180)
             {
                 moveDirection *= -1;
             }
@@ -228,6 +245,10 @@ public class NewBehaviourScript : MonoBehaviour
     private void WallJump()
     {
         wallJumpLockCounter = wallJumpLockTime;
+        if (currentWall == wallTypes.top)
+        {
+            wallJumpLockCounter = 0;
+        }
         isOnWall = false;
         transform.rotation = Quaternion.identity;
         jumpBufferCounter = 0f;

@@ -8,7 +8,7 @@ public class spikeController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-
+            playerController.instance.gameObject.transform.position = new Vector3(-7, -2, 0);
         }
     }
 }
