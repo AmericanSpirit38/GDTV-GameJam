@@ -264,8 +264,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundEffectClips:
-  - {fileID: 8300000, guid: 85dbe51336e2db64fb076f6b6b31ad6c, type: 3}
   - {fileID: 8300000, guid: 0c793f9edd3713e42b87b5654778f06b, type: 3}
+  - {fileID: 8300000, guid: 85dbe51336e2db64fb076f6b6b31ad6c, type: 3}
   - {fileID: 8300000, guid: d2d5c0bb096e06342aafd85ee504def4, type: 3}
   soundEffectSlider: {fileID: 2102168377}
 --- !u!82 &154475194
