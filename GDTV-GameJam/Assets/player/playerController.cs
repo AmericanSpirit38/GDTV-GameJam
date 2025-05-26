@@ -242,11 +242,11 @@ public class playerController : MonoBehaviour
         v.y = 0f;
         v.y += jumpForce;
         rb.velocity = v;
-        //SoundEffectSource.Instance.PlaySoundEffect(0);
+        SoundEffectSource.Instance.PlaySoundEffect(0);
     }
     private void WallJump()
     {
-        //SoundEffectSource.Instance.PlaySoundEffect(0);
+        SoundEffectSource.Instance.PlaySoundEffect(0);
         wallJumpLockCounter = wallJumpLockTime;
         if (currentWall == wallTypes.top)
         {
@@ -297,14 +297,15 @@ public class playerController : MonoBehaviour
         {
             LevelManager.instance.levelCompletionStatus[SceneManager.GetActiveScene().buildIndex - 1] = true;
             LevelManager.instance.SaveData();
+            
+            SceneManager.LoadScene(1);
         }
         else
         {
             Debug.Log("All levels completed! Starting victory scene.");
-            LevelManager.instance.levelCompletionStatus[SceneManager.GetActiveScene().buildIndex - 1] = true;
+            LevelManager.instance.levelCompletionStatus[SceneManager.GetActiveScene().buildIndex - 2] = true;
             LevelManager.instance.SaveData();
             SceneManager.LoadScene(8); // Assuming scene 8 is the victory scene
         }
-        SceneManager.LoadScene(1);
     }
 }
