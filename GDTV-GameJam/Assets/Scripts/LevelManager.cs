@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
 {
+    public static LevelManager instance;
     public List<bool> levelCompletionStatus;
     public List<GameObject> levelButtons;
     public List<GameObject> locks;
@@ -23,6 +24,7 @@ public class LevelManager : MonoBehaviour
             return;
         }
         DontDestroyOnLoad(gameObject);
+        instance = this;
     }
 
     public void OnEnable()
