@@ -16,7 +16,7 @@ public class spikeController : MonoBehaviour
             SoundEffectSource.Instance.PlaySoundEffect(1);
             if (checkPointMan == null)
             {
-                playerController.instance.gameObject.transform.position = new Vector3(-7, -2, 0);
+                playerController.instance.gameObject.transform.position = new Vector3(-2, -2, 0);
             }
             if (checkPointMan.isCheckpointActive)
             {
@@ -24,7 +24,7 @@ public class spikeController : MonoBehaviour
             }
             else
             {
-                playerController.instance.gameObject.transform.position = new Vector3(4, -2, 0);
+                playerController.instance.gameObject.transform.position = new Vector3(-2, -2, 0);
             }
             
         }
