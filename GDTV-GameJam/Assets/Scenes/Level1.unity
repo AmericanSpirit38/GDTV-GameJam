@@ -350,7 +350,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1.4
-  m_Text: On ceiling use a to move left and s to move right
+  m_Text: use A-D to move on ceiling
 --- !u!222 &453923302
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9311,11 +9311,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3008264154481143800, guid: e20841ae728913e4c82e58cdfd0f6e19, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.6
+      value: -6.46
       objectReference: {fileID: 0}
     - target: {fileID: 3008264154481143800, guid: e20841ae728913e4c82e58cdfd0f6e19, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.76
+      value: -3.38
       objectReference: {fileID: 0}
     - target: {fileID: 3008264154481143800, guid: e20841ae728913e4c82e58cdfd0f6e19, type: 3}
       propertyPath: m_LocalPosition.z
@@ -18985,7 +18985,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1.4
-  m_Text: use a to move up and d to move down
+  m_Text: Use A-D to move on right side of wall
 --- !u!222 &1939973485
 CanvasRenderer:
   m_ObjectHideFlags: 0
