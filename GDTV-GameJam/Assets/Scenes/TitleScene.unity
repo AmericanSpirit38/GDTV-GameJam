@@ -1656,6 +1656,11 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 78d261a06f04ae146895b10973b58cc0, type: 3}
   - {fileID: 8300000, guid: 78d261a06f04ae146895b10973b58cc0, type: 3}
   - {fileID: 8300000, guid: 78d261a06f04ae146895b10973b58cc0, type: 3}
+  - {fileID: 8300000, guid: 78d261a06f04ae146895b10973b58cc0, type: 3}
+  - {fileID: 8300000, guid: 78d261a06f04ae146895b10973b58cc0, type: 3}
+  - {fileID: 8300000, guid: 78d261a06f04ae146895b10973b58cc0, type: 3}
+  - {fileID: 8300000, guid: d5dc8810405351f42bf1c3e9163f908c, type: 3}
+  - {fileID: 0}
   musicSlider: {fileID: 1209434566}
 --- !u!1 &1084487908
 GameObject:
