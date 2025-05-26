@@ -19,7 +19,7 @@ public class spikeController : MonoBehaviour
             }
             else
             {
-                playerController.instance.gameObject.transform.position = new Vector3(-7, -2, 0);
+                playerController.instance.gameObject.transform.position = new Vector3(4, -2, 0);
             }
             
         }
