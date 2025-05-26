@@ -70,7 +70,12 @@ public class LevelManager : MonoBehaviour
         levelButtons.Clear();
         locks.Clear();
         levelButtons.AddRange(GameObject.FindGameObjectsWithTag("LevelButton"));
+        levelButtons.Sort((a, b) => string.Compare(a.name, b.name, StringComparison.Ordinal));
+
         locks.AddRange(GameObject.FindGameObjectsWithTag("Lock"));
+        locks.Sort((a, b) => string.Compare(a.name, b.name, StringComparison.Ordinal));
+        Debug.Log(levelButtons);
+        Debug.Log(locks);
         for (int i = 0; i < levelButtons.Count; i++)
         {
             if (i < levelCompletionStatus.Count && levelCompletionStatus[i])
