@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static UnityEngine.GraphicsBuffer;
 
 public class playerController : MonoBehaviour
@@ -278,5 +279,32 @@ public class playerController : MonoBehaviour
 
         // Apply wall jump force
         rb.AddForce(jumpDir.normalized * jumpForce, ForceMode2D.Impulse);
+    }
+  
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("LevelExit"))
+        {
+            FinishLevel();
+        }
+    }
+
+    private static void FinishLevel()
+    {
+        Debug.Log("Level Finished");
+        SoundEffectSource.Instance.PlaySoundEffect(0);
+        if (SceneManager.GetActiveScene().buildIndex != 7) // Assuming level 7 is the last level
+        {
+            LevelManager.instance.levelCompletionStatus[SceneManager.GetActiveScene().buildIndex - 1] = true;
+            LevelManager.instance.SaveData();
+        }
+        else
+        {
+            Debug.Log("All levels completed! Starting victory scene.");
+            LevelManager.instance.levelCompletionStatus[SceneManager.GetActiveScene().buildIndex - 1] = true;
+            LevelManager.instance.SaveData();
+            SceneManager.LoadScene(8); // Assuming scene 8 is the victory scene
+        }
+        SceneManager.LoadScene(1);
     }
 }

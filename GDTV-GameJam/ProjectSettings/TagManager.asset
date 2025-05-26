@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Lock
   - LevelButton
+  - LevelExit
   layers:
   - Default
   - TransparentFX
