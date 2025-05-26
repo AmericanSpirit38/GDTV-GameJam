@@ -235,15 +235,17 @@ public class playerController : MonoBehaviour
 
     private void Jump()
     {
+        
         jumpBufferCounter = 0f;
         Vector2 v = rb.velocity;
         v.y = 0f;
         v.y += jumpForce;
         rb.velocity = v;
-
+        SoundEffectSource.Instance.PlaySoundEffect(0);
     }
     private void WallJump()
     {
+        SoundEffectSource.Instance.PlaySoundEffect(0);
         wallJumpLockCounter = wallJumpLockTime;
         if (currentWall == wallTypes.top)
         {
