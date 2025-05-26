@@ -18,6 +18,7 @@ public class LevelManager : MonoBehaviour
 
     public void Awake()
     {
+        LoadData();
         if (FindObjectsOfType<LevelManager>().Length > 1)
         {
             Destroy(gameObject);
@@ -26,11 +27,22 @@ public class LevelManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         instance = this;
     }
-
-    public void OnEnable()
+    
+    private void OnEnable()
     {
-        if (SceneManager.GetActiveScene().buildIndex == 1)
+        SceneManager.sceneLoaded += OnLoadedLevel;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnLoadedLevel;
+    }
+    
+    private void OnLoadedLevel(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.buildIndex == 1) // Main menu scene
         {
+            Debug.Log("LevelManager loaded in main menu scene.");
             LoadData();
             UpdateLevelButtons();
         }

@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 362678994}
   m_Layer: 0
   m_Name: Square (5)
-  m_TagString: Untagged
+  m_TagString: LevelExit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1015,6 +1015,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1677895191103956407, guid: e20841ae728913e4c82e58cdfd0f6e19, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3008264154481143800, guid: e20841ae728913e4c82e58cdfd0f6e19, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.178
