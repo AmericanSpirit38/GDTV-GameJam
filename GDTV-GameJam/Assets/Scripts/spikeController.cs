@@ -4,11 +4,24 @@ using UnityEngine;
 
 public class spikeController : MonoBehaviour
 {
+    public CheckPointManager checkPointMan;
+    private void Start()
+    {
+        checkPointMan = FindFirstObjectByType<CheckPointManager>();
+    }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            playerController.instance.gameObject.transform.position = new Vector3(-7, -2, 0);
+            if (checkPointMan.isCheckpointActive)
+            {
+                playerController.instance.gameObject.transform.position = checkPointMan.checkPoint.position;
+            }
+            else
+            {
+                playerController.instance.gameObject.transform.position = new Vector3(-7, -2, 0);
+            }
+            
         }
     }
 }
