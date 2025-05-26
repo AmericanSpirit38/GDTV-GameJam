@@ -11113,6 +11113,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: player
       objectReference: {fileID: 0}
+    - target: {fileID: 6485491295566514490, guid: e20841ae728913e4c82e58cdfd0f6e19, type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6485491295566514490, guid: e20841ae728913e4c82e58cdfd0f6e19, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 890617017
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
